@@ -1,0 +1,37 @@
+<html>
+  <head>
+    
+  </head>
+  <body>
+    
+<form id="search">
+  <label>Type</label>
+  <select name="types" id="types">
+    <option value="Artist" selected>Artist</option>
+  </select>
+  <label>Query</label>
+  <input type="text" name="query" id="query"/>
+  <input type="submit" name="Submit" label="Submit"/>
+</form>
+<div id="results"></div>
+
+<script type="text/javascript" src="https://www.google.com/jsapi"></script>
+<script type="text/javascript">
+  google.load("jquery", "1.4.2");
+  google.load("jqueryui", "1.7.2");
+</script>
+
+<script src="/socket.io/socket.io.js"></script>
+<script>
+  var socket = io.connect('http://localhost');
+  socket.on('results', function (data) {
+    console.log(data);
+    $('#results').text(data);
+  });
+  $('form').submit(function() {
+    socket.emit('search', {types: $('#types').val(), query: $('#query').val()});
+    return false;
+  });
+</script>
+</body>
+</html>
