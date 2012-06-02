@@ -1,0 +1,20 @@
+form(id="search")
+  label Type
+  select(name="types", id="types")
+    option(value="Artist", selected="selected") Artist
+  label Query
+  input(type="text", name="query", id="query")
+  input(type="submit", name="Submit", label="Submit")
+div(id="results")
+
+script(src="/socket.io/socket.io.js")
+script(type="text/javascript")
+  var socket = io.connect('http://localhost');
+  socket.on('results', function (data) {
+    console.log(data);
+    $('#results').text(data.toString());
+  });
+  $('form').submit(function() {
+    socket.emit('search', {types: $('#types').val(), query: $('#query').val()});
+    return false;
+  });
